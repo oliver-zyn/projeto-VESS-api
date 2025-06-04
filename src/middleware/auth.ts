@@ -46,7 +46,7 @@ export const authenticateToken = async (
 
     req.userId = decoded.userId;
     req.user = user;
-    next();
+    return next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
@@ -87,9 +87,9 @@ export const optionalAuth = async (
       }
     }
 
-    next();
+    return next();
   } catch (error) {
     // Em caso de erro, continua sem autenticação
-    next();
+    return next();
   }
 };
