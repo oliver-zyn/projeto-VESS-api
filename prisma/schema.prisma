@@ -1,0 +1,96 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  address       String?
+  country       String   @default("Brasil")
+  cityState     String?
+  language      String   @default("Português (Brasil)")
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relacionamentos
+  evaluations   Evaluation[]
+  
+  @@map("users")
+}
+
+model Evaluation {
+  id                    String   @id @default(cuid())
+  name                  String
+  date                  String
+  startTime             String
+  endTime               String?
+  averageScore          Float    @default(0)
+  managementDescription String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relacionamentos
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  samples               Sample[]
+  
+  @@map("evaluations")
+}
+
+model Sample {
+  id                String   @id @default(cuid())
+  name              String
+  location          String?
+  otherInfo         String?
+  managementDecision String?
+  sampleScore       Float    @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relacionamentos
+  evaluationId      String
+  evaluation        Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  layers            Layer[]
+  photos            Photo[]
+  
+  @@map("samples")
+}
+
+model Layer {
+  id        String   @id @default(cuid())
+  length    Float
+  score     Float
+  order     Int      // Ordem da camada (1, 2, 3, etc.)
+  createdAt DateTime @default(now())
+  
+  // Relacionamentos
+  sampleId  String
+  sample    Sample   @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+  
+  @@map("layers")
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  url         String
+  createdAt   DateTime @default(now())
+  
+  // Relacionamentos
+  sampleId    String
+  sample      Sample   @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+  
+  @@map("photos")
+}
