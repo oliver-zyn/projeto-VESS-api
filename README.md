@@ -14,28 +14,26 @@ API REST para o aplicativo VESS desenvolvida com Node.js, Express, TypeScript e 
 # 1. Clone/crie o projeto
 mkdir vess-api && cd vess-api
 
-# 2. Copie todos os arquivos para suas respectivas pastas
-
-# 3. Instale as dependências
+# 2. Instale as dependências
 npm install
 
-# 4. Configure o banco PostgreSQL
+# 3. Configure o banco PostgreSQL
 # Crie um banco chamado 'vess_db' no PostgreSQL
 
-# 5. Configure as variáveis de ambiente
+# 4. Configure as variáveis de ambiente
 cp .env.example .env
 # Edite o .env com suas configurações
 
-# 6. Execute as migrações
+# 5. Execute as migrações
 npx prisma migrate dev --name init
 
-# 7. Gere o cliente Prisma
+# 6. Gere o cliente Prisma
 npx prisma generate
 
-# 8. Execute o seed (dados iniciais)
+# 7. Execute o seed (dados iniciais)
 npx prisma db seed
 
-# 9. Inicie o servidor
+# 8. Inicie o servidor
 npm run dev
 ```
 

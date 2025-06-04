@@ -1,4 +1,4 @@
-// src/routes/evaluations.ts
+// src/routes/evaluation.ts
 import { Router } from "express";
 import { EvaluationController } from "../controllers/evaluationController";
 import { authenticateToken } from "../middleware/auth";
