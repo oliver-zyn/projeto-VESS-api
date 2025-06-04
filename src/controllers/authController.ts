@@ -42,7 +42,7 @@ export class AuthController {
 
     const result = await AuthService.refreshToken(refreshToken);
 
-    res.status(HTTP_STATUS.OK).json({
+    return res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Token renovado com sucesso",
       data: result,
@@ -78,7 +78,7 @@ export class AuthController {
       });
     }
 
-    res.status(HTTP_STATUS.OK).json({
+    return res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Token válido",
       data: { user },
