@@ -272,7 +272,7 @@ export class EvaluationService {
       evaluations.length > 0
         ? Number(
             (
-              evaluations.reduce((sum, eval) => sum + eval.averageScore, 0) /
+              evaluations.reduce((sum, e) => sum + e.averageScore, 0) /
               evaluations.length
             ).toFixed(1)
           )

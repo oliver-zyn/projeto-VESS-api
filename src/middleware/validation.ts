@@ -7,7 +7,7 @@ export const validateBody = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       req.body = schema.parse(req.body);
-      next();
+      return next();
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessages = error.errors.map((err) => ({
@@ -34,7 +34,7 @@ export const validateParams = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       req.params = schema.parse(req.params);
-      next();
+      return next();
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -56,7 +56,7 @@ export const validateQuery = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       req.query = schema.parse(req.query);
-      next();
+      return next();
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({

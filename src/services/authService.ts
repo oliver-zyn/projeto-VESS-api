@@ -1,6 +1,6 @@
 // src/services/authService.ts
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import prisma from "../config/database";
 import env from "../config/env";
 import { CreateUserData, LoginData, TokenPayload } from "../types";
@@ -33,13 +33,17 @@ export class AuthService {
       type: "refresh",
     };
 
-    const accessToken = jwt.sign(accessTokenPayload, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN,
-    });
+    const accessToken = jwt.sign(
+      accessTokenPayload,
+      env.JWT_SECRET,
+      { expiresIn: env.JWT_EXPIRES_IN } as jwt.SignOptions
+    ) as string;
 
-    const refreshToken = jwt.sign(refreshTokenPayload, env.JWT_REFRESH_SECRET, {
-      expiresIn: env.JWT_REFRESH_EXPIRES_IN,
-    });
+    const refreshToken = jwt.sign(
+      refreshTokenPayload,
+      env.JWT_REFRESH_SECRET,
+      { expiresIn: env.JWT_REFRESH_EXPIRES_IN } as jwt.SignOptions
+    ) as string;
 
     return { accessToken, refreshToken };
   }
