@@ -29,13 +29,37 @@ export class EvaluationController {
       const userId = req.userId!;
       const query = req.query as unknown as PaginationQuery;
 
-      const result = await EvaluationService.getEvaluations(userId, query);
+      console.log("📊 getEvaluations - userId:", userId); // Debug
+      console.log("📊 getEvaluations - query:", query); // Debug
 
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        data: result.evaluations,
-        pagination: result.pagination,
-      });
+      try {
+        const result = await EvaluationService.getEvaluations(userId, query);
+
+        console.log("📊 getEvaluations - result:", {
+          evaluationsCount: result.evaluations.length,
+          pagination: result.pagination,
+        }); // Debug
+
+        // Mapear avaliações para incluir o nome do avaliador
+        const mappedEvaluations = result.evaluations.map((evaluation) => ({
+          ...evaluation,
+          evaluator: evaluation.user?.name || "Avaliador desconhecido",
+        }));
+
+        console.log(
+          "📊 getEvaluations - mapped first evaluation:",
+          mappedEvaluations[0]
+        ); // Debug
+
+        res.status(HTTP_STATUS.OK).json({
+          success: true,
+          data: mappedEvaluations,
+          pagination: result.pagination,
+        });
+      } catch (error) {
+        console.error("❌ Erro em getEvaluations:", error); // Debug
+        throw error;
+      }
     }
   );
 

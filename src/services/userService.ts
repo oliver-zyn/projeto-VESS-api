@@ -1,4 +1,4 @@
-// src/services/userService.ts
+// vess-api/src/services/userService.ts (CORRIGIDO)
 import prisma from "../config/database";
 import { UpdateUserData } from "../types";
 import { CustomError } from "../middleware/errorHandler";
@@ -27,11 +27,20 @@ export class UserService {
       throw error;
     }
 
+    console.log("Usuário encontrado no banco:", {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      address: user.address,
+      country: user.country,
+      cityState: user.cityState,
+      language: user.language,
+    });
+
     return user;
   }
 
   static async updateUserProfile(userId: string, updateData: UpdateUserData) {
-    // Verificar se o usuário existe
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -42,10 +51,25 @@ export class UserService {
       throw error;
     }
 
-    // Atualizar usuário
+    console.log("Dados para atualização:", updateData);
+
+    const dataToUpdate: any = {};
+
+    if (updateData.name !== undefined) dataToUpdate.name = updateData.name;
+    if (updateData.address !== undefined)
+      dataToUpdate.address = updateData.address;
+    if (updateData.country !== undefined)
+      dataToUpdate.country = updateData.country;
+    if (updateData.cityState !== undefined)
+      dataToUpdate.cityState = updateData.cityState;
+    if (updateData.language !== undefined)
+      dataToUpdate.language = updateData.language;
+
+    console.log("Dados finais para atualização:", dataToUpdate);
+
     const updatedUser = await prisma.user.update({
       where: { id: userId },
-      data: updateData,
+      data: dataToUpdate,
       select: {
         id: true,
         email: true,
@@ -58,11 +82,12 @@ export class UserService {
       },
     });
 
+    console.log("Usuário atualizado:", updatedUser);
+
     return updatedUser;
   }
 
   static async deleteUser(userId: string) {
-    // Verificar se o usuário existe
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -73,7 +98,6 @@ export class UserService {
       throw error;
     }
 
-    // Deletar usuário (cascata vai deletar avaliações relacionadas)
     await prisma.user.delete({
       where: { id: userId },
     });
@@ -82,7 +106,6 @@ export class UserService {
   }
 
   static async getUserStats(userId: string) {
-    // Verificar se o usuário existe
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -93,7 +116,6 @@ export class UserService {
       throw error;
     }
 
-    // Buscar estatísticas
     const totalEvaluations = await prisma.evaluation.count({
       where: { userId },
     });
@@ -106,10 +128,8 @@ export class UserService {
       },
     });
 
-    // Data de cadastro
     const memberSince = user.createdAt;
 
-    // Última avaliação
     const lastEvaluation = await prisma.evaluation.findFirst({
       where: { userId },
       orderBy: { createdAt: "desc" },
@@ -121,7 +141,6 @@ export class UserService {
       },
     });
 
-    // Avaliações este mês
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 

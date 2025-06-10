@@ -57,7 +57,7 @@ JWT_SECRET="gere-uma-chave-secreta-de-32-caracteres"
 JWT_REFRESH_SECRET="gere-outra-chave-secreta-de-32-caracteres"
 JWT_EXPIRES_IN=1h
 JWT_REFRESH_EXPIRES_IN=7d
-CORS_ORIGIN=http://localhost:3000
+CORS_ORIGIN=http://localhost:5173
 ```
 
 ## 🏃‍♂️ **Scripts Disponíveis**
