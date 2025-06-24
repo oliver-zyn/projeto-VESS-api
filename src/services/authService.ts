@@ -1,6 +1,6 @@
 // src/services/authService.ts
 import bcrypt from "bcryptjs";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import prisma from "../config/database";
 import env from "../config/env";
 import { CreateUserData, LoginData, TokenPayload } from "../types";
